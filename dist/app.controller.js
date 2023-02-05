@@ -12,30 +12,68 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppController = void 0;
+exports.AppController = exports.TesteController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
 const axios_1 = require("axios");
+let TesteController = class TesteController {
+    constructor(appService) {
+        this.appService = appService;
+    }
+    test() {
+        return 'ok';
+    }
+    test_post() {
+        return 'ok';
+    }
+};
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], TesteController.prototype, "test", null);
+__decorate([
+    (0, common_1.Post)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], TesteController.prototype, "test_post", null);
+TesteController = __decorate([
+    (0, common_1.Controller)('teste'),
+    __metadata("design:paramtypes", [app_service_1.AppService])
+], TesteController);
+exports.TesteController = TesteController;
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
     async get(request) {
         const params = request.query;
-        const url = process.env.PROXY_URL;
-        console.log(url);
-        await axios_1.default.get(url, {
-            headers: request.headers,
-            params: request.query,
-        });
-        return params['hub.challenge'];
+        try {
+            const url = process.env.PROXY_URL;
+            await axios_1.default.get(url, {
+                headers: request.headers,
+                params: request.query,
+            });
+        }
+        catch (_a) { }
+        try {
+            return params['hub.challenge'];
+        }
+        catch (_b) {
+            return 'ok';
+        }
     }
     async post(request) {
-        const url = process.env.PROXY_URL;
-        await axios_1.default.post(url, request.body, {
-            headers: request.headers,
-            params: request.query,
-        });
+        try {
+            const url = process.env.PROXY_URL;
+            await axios_1.default.post(url, request.body, {
+                headers: request.headers,
+                params: request.query,
+            });
+        }
+        catch (_a) { }
         return 'ok';
     }
 };

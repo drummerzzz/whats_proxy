@@ -20,7 +20,7 @@ AppModule = __decorate([
                 envFilePath: '.env',
             }),
         ],
-        controllers: [app_controller_1.AppController],
+        controllers: [app_controller_1.AppController, app_controller_1.TesteController],
         providers: [app_service_1.AppService],
     })
 ], AppModule);

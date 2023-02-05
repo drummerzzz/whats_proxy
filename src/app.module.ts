@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { AppController, TesteController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 
@@ -9,7 +9,7 @@ import { AppService } from './app.service';
       envFilePath: '.env',
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, TesteController],
   providers: [AppService],
 })
 export class AppModule {}
