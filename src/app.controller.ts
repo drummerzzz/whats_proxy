@@ -9,13 +9,38 @@ import axios from 'axios';
 export class TesteController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  test(): any {
-    return 'ok';
+  @Get('/url')
+  async url(): Promise<any> {
+    const url = process.env.PROXY_URL;
+    return url;
   }
+
+  @Get()
+  async test(@Req() request: Request): Promise<any> {
+    const url = process.env.PROXY_URL;
+    try {
+      const response = await axios.get(url, {
+        headers: request.headers,
+        params: request.query,
+      });
+      return response.status;
+    } catch (error) {
+      return error;
+    }
+  }
+
   @Post()
-  test_post(): any {
-    return 'ok';
+  async test_post(@Req() request: Request): Promise<any> {
+    const url = process.env.PROXY_URL;
+    try {
+      const response = await axios.post(url, {
+        headers: request.headers,
+        params: request.query,
+      });
+      return response.status;
+    } catch (error) {
+      return error;
+    }
   }
 }
 
