@@ -24,9 +24,13 @@ export class TesteController {
   async test(@Req() request: Request): Promise<any> {
     const url = process.env.PROXY_URL;
     try {
+      const headers = Object.keys(request.headers).reduce((a, key) => {
+        return { ...a, key: request.headers[key].toString() };
+      }, {});
+
       const response = await axios.get(url, {
-        headers: request.headers,
         params: request.query,
+        headers: { 'ngrok-skip-browser-warning': true, ...headers },
         httpsAgent,
       });
       return {
@@ -43,12 +47,19 @@ export class TesteController {
   async test_post(@Req() request: Request): Promise<any> {
     const url = process.env.PROXY_URL;
     try {
+      const headers = Object.keys(request.headers).reduce((a, key) => {
+        return { ...a, key: request.headers[key].toString() };
+      }, {});
       const response = await axios.post(url, {
-        headers: request.headers,
+        headers: { 'ngrok-skip-browser-warning': true, ...headers },
         params: request.query,
         httpsAgent,
       });
-      return { status: response.status, response: response.data, headers: response.headers };
+      return {
+        status: response.status,
+        response: response.data,
+        headers: response.headers,
+      };
     } catch (error) {
       return error;
     }
@@ -64,8 +75,11 @@ export class AppController {
     const params = request.query;
     try {
       const url = process.env.PROXY_URL;
+      const headers = Object.keys(request.headers).reduce((a, key) => {
+        return { ...a, key: request.headers[key].toString() };
+      }, {});
       await axios.get(url, {
-        headers: request.headers,
+        headers: { 'ngrok-skip-browser-warning': true, ...headers },
         params: request.query,
         httpsAgent,
       });
@@ -81,8 +95,11 @@ export class AppController {
   async post(@Req() request: Request): Promise<any> {
     try {
       const url = process.env.PROXY_URL;
+      const headers = Object.keys(request.headers).reduce((a, key) => {
+        return { ...a, key: request.headers[key].toString() };
+      }, {});
       await axios.post(url, request.body, {
-        headers: request.headers,
+        headers: { 'ngrok-skip-browser-warning': true, ...headers },
         params: request.query,
         httpsAgent,
       });
