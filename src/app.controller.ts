@@ -2,8 +2,13 @@ import { Controller, Get, Post, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 
 import { Request } from 'express';
+import { Agent } from 'https';
 
 import axios from 'axios';
+
+const httpsAgent = new Agent({
+  rejectUnauthorized: false, // (NOTE: this will disable client verification)
+});
 
 @Controller('teste')
 export class TesteController {
@@ -22,8 +27,13 @@ export class TesteController {
       const response = await axios.get(url, {
         headers: request.headers,
         params: request.query,
+        httpsAgent,
       });
-      return response.status;
+      return {
+        status: response.status,
+        response: response.data,
+        headers: response.headers,
+      };
     } catch (error) {
       return error;
     }
@@ -36,8 +46,9 @@ export class TesteController {
       const response = await axios.post(url, {
         headers: request.headers,
         params: request.query,
+        httpsAgent,
       });
-      return response.status;
+      return { status: response.status, response: response.data, headers: response.headers };
     } catch (error) {
       return error;
     }
@@ -56,6 +67,7 @@ export class AppController {
       await axios.get(url, {
         headers: request.headers,
         params: request.query,
+        httpsAgent,
       });
     } catch {}
     try {
@@ -72,6 +84,7 @@ export class AppController {
       await axios.post(url, request.body, {
         headers: request.headers,
         params: request.query,
+        httpsAgent,
       });
     } catch {}
     return 'ok';
